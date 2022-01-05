@@ -15,9 +15,12 @@
   </div>
 
   <Discount />
-  <!-- <div v-for="(l, i) in products" :key="i">
-    <Card :l="products[i]" />
-  </div> -->
+
+  <button @click="priceSort">가격순 정렬</button>
+  <button @click="reverseSort">가격역순 정렬</button>
+  <button @click="alphaSort">가나다 정렬</button>
+  <button @click="sortBack">되돌리기</button>
+
   <Card
     @openModal="
       modalStatus = true;
@@ -44,6 +47,7 @@ export default {
       contentNum: 0,
       메뉴들: ['Home', 'Products', 'About'],
       products: roomDatas,
+      origProducts: [...roomDatas],
     };
   },
   methods: {
@@ -51,6 +55,22 @@ export default {
     //   console.log("신고완료");
     //   this.reportScore += 1;
     // },
+    priceSort() {
+      // sort 함수는 기본적으로 오름차순정렬, 그런데 위처럼 쓰면 문자로 비교하여 정렬한다.
+      // 숫자로 정렬하기 위해서는 sort내부에 fucntion을 하여 비교해주어야한다.(sort의 동작방식 때문)
+      this.products.sort(function (a, b) {
+        return a.price - b.price;
+      });
+      //sort는 원본데이터를 변경한다. 원본데이터는
+    },
+    reverseSort() {
+      this.products.sort(function (a, b) {
+        return b.price - a.price;
+      });
+    },
+    sortBack() {
+      this.products = [...this.origProducts];
+    },
   },
   components: {
     Discount: Discountvue,
@@ -69,7 +89,8 @@ div {
 }
 
 .room-img {
-  width: 100%;
+  /* width: 100%; */
+  width: 50%;
   margin-top: 40px;
 }
 
