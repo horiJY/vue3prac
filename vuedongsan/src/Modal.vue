@@ -8,10 +8,10 @@
       <Discount />
       <p>
         예약 개월 수 :
-        <!-- <input @input="month = $event.target.value" type="number" /> -->
+        <!-- <input @input="month = $event.target.value" /> -->
         <input v-model="month" />
       </p>
-      <p>{{ month }}개월 : {{ products[contentNum].price + month }}원</p>
+      <p>{{ month }}개월 : {{ products[contentNum].price * month }}원</p>
 
       <button @click="$emit('closeModal')">닫기</button>
     </div>
@@ -20,23 +20,38 @@
 
 <script>
 export default {
-  name: 'Modal',
+  name: "Modal",
   data() {
     return {
-      month: 1,
+      month: 3,
     };
   },
-  watch: {
-    month(a) {
-      //   var regNumber = /^[0-9]*$/;
-      if (a > 12) {
-        alert('최대 12개월까지 가능합니다.');
-      } else if (isNaN(a) == true || a.search(/\s/g) != -1) {
-        alert('숫자만 입력하세요.');
-        this.month = 1;
-      }
-    },
+  updated() {
+    if (this.month > 12) {
+      alert("최대 12개월까지 가능합니다.");
+      this.month = 12;
+    } else if (this.month < 3) {
+      alert("최소 3개월 이상 가능합니다.");
+      this.month = 3;
+    } else if (
+      isNaN(this.month) == true ||
+      this.month.toString().search(/\s/g) != -1
+    ) {
+      alert("숫자만 입력하세요.");
+      this.month = 3;
+    }
   },
+  // watch: {
+  //   month(a) {
+  //     //   var regNumber = /^[0-9]*$/;
+  //     if (a > 12) {
+  //       alert("최대 12개월까지 가능합니다.");
+  //     } else if (isNaN(a) == true || a.search(/\s/g) != -1) {
+  //       alert("숫자만 입력하세요.");
+  //       this.month = 1;
+  //     }
+  //   },
+  // },
   props: {
     modalStatus: Boolean,
     products: Array,

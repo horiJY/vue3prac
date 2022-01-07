@@ -14,7 +14,7 @@
     <a v-for="m in 메뉴들" :key="m">{{ m }}</a>
   </div>
 
-  <Discount />
+  <Discount v-if="showDiscount == true" />
 
   <button @click="priceSort">가격순 정렬</button>
   <button @click="reverseSort">가격역순 정렬</button>
@@ -45,6 +45,7 @@ export default {
     return {
       modalStatus: false,
       contentNum: 0,
+      showDiscount: true,
       메뉴들: ['Home', 'Products', 'About'],
       products: roomDatas,
       origProducts: [...roomDatas],
@@ -68,9 +69,26 @@ export default {
         return b.price - a.price;
       });
     },
+    alphaSort() {
+      this.products.sort(function (a, b) {
+        return a.title.toLowerCase() < b.title.toLowerCase()
+          ? -1
+          : a.title.toLowerCase() > b.title.toLowerCase()
+          ? 1
+          : 0;
+      });
+    },
     sortBack() {
       this.products = [...this.origProducts];
     },
+  },
+  mounted() {
+    setTimeout(function () {
+      this.showDiscount = false;
+    }, 2000);
+    // setTimeout(() => {
+    //   this.showDiscount = false;
+    // }, 2000);
   },
   components: {
     Discount: Discountvue,
