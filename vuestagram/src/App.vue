@@ -4,22 +4,28 @@
       <li @click="step = 0">Cancel</li>
     </ul>
     <ul class="header-button-right">
-      <li @click="if (step < 2) step++;">Next</li>
+      <li v-if="step == 1" @click="if (step < 2) step++;">Next</li>
+      <li v-if="step == 2" @click="publish">발행</li>
     </ul>
     <img src="./assets/logo.png" class="logo" />
   </div>
 
-  <Container :postdatas="postdatas" :step="step" :uploadImg="uploadImg" />
-  <button @click="more">더 보기</button>
+  <Container
+    :postdatas="postdatas"
+    :step="step"
+    :uploadimg="uploadimg"
+    @write="writeContent = $event"
+  />
+  <!-- <button @click="more">더 보기</button> -->
 
   <div class="footer">
     <ul class="footer-button-plus">
       <input
-        @change="upload"
+        id="file"
         multiple
         type="file"
-        id="file"
         class="inputfile"
+        @change="upload"
       />
       <label for="file" class="input-plus">+</label>
     </ul>
@@ -33,16 +39,17 @@ import axios from 'axios';
 
 export default {
   name: 'App',
+  components: {
+    Container: container,
+  },
   data() {
     return {
       postdatas: postDatas,
       moreBtnCount: 0,
       step: 0,
-      uploadImg: '',
+      uploadimg: '',
+      writeContent: '',
     };
-  },
-  components: {
-    Container: container,
   },
   methods: {
     more() {
@@ -63,9 +70,23 @@ export default {
       // console.log(imgfile[0].type);
       let uploadUrl = URL.createObjectURL(imgfile[0]);
       // console.log(uploadUrl);
-      this.uploadImg = uploadUrl;
+      this.uploadimg = uploadUrl;
       // console.log(this.uploadImg);
-      this.step++;
+      this.step = 1;
+    },
+    publish() {
+      var newpost = {
+        name: 'JY',
+        userImage: 'https://placeimg.com/100/100/arch',
+        postImage: this.uploadimg,
+        likes: 0,
+        date: 'May 15',
+        liked: false,
+        content: this.writeContent,
+        filter: 'perpetua',
+      };
+      this.postdatas.unshift(newpost);
+      this.step = 0;
     },
   },
 };

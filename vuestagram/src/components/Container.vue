@@ -1,21 +1,22 @@
 <template>
   <div>
     <div v-if="step == 0">
-      <Post :post="postdatas[i]" v-for="(post, i) in postdatas" :key="i" />
+      <Post v-for="(post, i) in postdatas" :key="i" :post="postdatas[i]" />
     </div>
 
     <div v-if="step == 1">
       <!-- 필터선택페이지 -->
       <div
         class="upload-image"
-        :style="{ backgroundImage: `url(${uploadImg})` }"
-      ></div>
+        :style="{ backgroundImage: `url(${uploadimg})` }"
+      />
       <div class="filters">
-        <div class="filter-1"></div>
-        <div class="filter-1"></div>
-        <div class="filter-1"></div>
-        <div class="filter-1"></div>
-        <div class="filter-1"></div>
+        <FilterBox
+          :uploadimg="uploadimg"
+          v-for="f in filters"
+          :key="f"
+          :f="f"
+        />
       </div>
     </div>
 
@@ -23,10 +24,15 @@
       <!-- 글작성페이지 -->
       <div
         class="upload-image"
-        :style="{ backgroundImage: `url(${uploadImg})` }"
-      ></div>
+        :style="{ backgroundImage: `url(${uploadimg})` }"
+      />
       <div class="write">
-        <textarea class="write-box">write!</textarea>
+        <textarea
+          class="write-box"
+          @input="$emit('write', $event.target.value)"
+        >
+write!</textarea
+        >
       </div>
     </div>
   </div>
@@ -34,16 +40,50 @@
 
 <script>
 import post from '@/components/Post';
+import filterBox from '@/components/FilterBox';
 
 export default {
   name: 'Container',
+  data() {
+    return {
+      filters: [
+        'aden',
+        '_1977',
+        'brannan',
+        'brooklyn',
+        'clarendon',
+        'earlybird',
+        'gingham',
+        'hudson',
+        'inkwell',
+        'kelvin',
+        'lark',
+        'lofi',
+        'maven',
+        'mayfair',
+        'moon',
+        'nashville',
+        'perpetua',
+        'reyes',
+        'rise',
+        'slumber',
+        'stinson',
+        'toaster',
+        'valencia',
+        'walden',
+        'willow',
+        'xpro2',
+      ],
+    };
+  },
   components: {
     Post: post,
+    FilterBox: filterBox,
   },
   props: {
     postdatas: Array,
     step: Number,
-    uploadImg: String,
+    uploadimg: String,
   },
 };
 </script>
@@ -58,16 +98,6 @@ export default {
 .filters {
   overflow-x: scroll;
   white-space: nowrap;
-}
-.filter-1 {
-  width: 100px;
-  height: 100px;
-  background-color: cornflowerblue;
-  margin: 10px 10px 10px auto;
-  padding: 8px;
-  display: inline-block;
-  color: white;
-  background-size: cover;
 }
 .filters::-webkit-scrollbar {
   height: 5px;
