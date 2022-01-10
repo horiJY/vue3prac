@@ -1,22 +1,25 @@
 <template>
   <div>
     <div v-if="step == 0">
-      <Post v-for="(post, i) in postdatas" :key="i" :post="postdatas[i]" />
+      <Post
+        v-for="(post, i) in postdatas"
+        :key="i"
+        :post="postdatas[i]"
+        :selectedfilter="selectedfilter"
+      />
     </div>
 
     <div v-if="step == 1">
       <!-- 필터선택페이지 -->
       <div
         class="upload-image"
+        :class="selectedfilter"
         :style="{ backgroundImage: `url(${uploadimg})` }"
       />
       <div class="filters">
-        <FilterBox
-          :uploadimg="uploadimg"
-          v-for="f in filters"
-          :key="f"
-          :f="f"
-        />
+        <FilterBox v-for="f in filters" :key="f" :f="f" :uploadimg="uploadimg">
+          <span style="color: black"> {{ f }} </span>
+        </FilterBox>
       </div>
     </div>
 
@@ -24,6 +27,7 @@
       <!-- 글작성페이지 -->
       <div
         class="upload-image"
+        :class="selectedfilter"
         :style="{ backgroundImage: `url(${uploadimg})` }"
       />
       <div class="write">
@@ -35,12 +39,16 @@ write!</textarea
         >
       </div>
     </div>
+    <div v-if="step == 3">
+      <MyPage />
+    </div>
   </div>
 </template>
 
 <script>
 import post from '@/components/Post';
 import filterBox from '@/components/FilterBox';
+import myPage from '@/components/MyPage';
 
 export default {
   name: 'Container',
@@ -79,11 +87,13 @@ export default {
   components: {
     Post: post,
     FilterBox: filterBox,
+    MyPage: myPage,
   },
   props: {
     postdatas: Array,
     step: Number,
     uploadimg: String,
+    selectedfilter: String,
   },
 };
 </script>

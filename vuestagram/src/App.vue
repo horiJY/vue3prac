@@ -1,22 +1,34 @@
 <template>
   <div class="header">
     <ul class="header-button-left">
-      <li @click="step = 0">Cancel</li>
+      <li @click="step = 0">Back</li>
+      <li @click="step = 3">MyPage</li>
     </ul>
     <ul class="header-button-right">
       <li v-if="step == 1" @click="if (step < 2) step++;">Next</li>
       <li v-if="step == 2" @click="publish">발행</li>
     </ul>
     <img src="./assets/logo.png" class="logo" />
+    <!-- <h4>안녕 {{ $store.state.name }} ({{ $store.state.age }})</h4> -->
+    <!--<button @click="$store.commit('changename')">name 수정</button>
+    <button @click="$store.commit('addage', 10)">age 증가</button> -->
+    <!-- <button @click="addage(10)">age 증가</button> -->
   </div>
-
+  <!-- <p>{{ now() }} {{ moreBtnCount }}</p> -->
+  <!-- <p>{{ now2 }}</p> -->
+  <!-- <button @click="moreBtnCount++">now 테스트</button> -->
   <Container
     :postdatas="postdatas"
     :step="step"
     :uploadimg="uploadimg"
+    :selectedfilter="selectedfilter"
     @write="writeContent = $event"
   />
-  <!-- <button @click="more">더 보기</button> -->
+
+  <!-- <Container :postdatas="$store.state.more" :step="step" /> -->
+  <!-- <p>{{ $store.state.more }}</p> -->
+  <button v-if="step == 0" @click="more">더 보기</button>
+  <!-- <button v-if="step == 0" @click="$store.dispatch('getMore')">더 보기</button> -->
 
   <div class="footer">
     <ul class="footer-button-plus">
@@ -36,6 +48,7 @@
 import container from '@/components/Container.vue';
 import postDatas from '@/assets/postdatas.js';
 import axios from 'axios';
+import { mapState, mapMutations } from 'vuex';
 
 export default {
   name: 'App',
@@ -49,9 +62,26 @@ export default {
       step: 0,
       uploadimg: '',
       writeContent: '',
+      selectedfilter: '',
     };
   },
+  mounted() {
+    this.emitter.on('selectfilter', (a) => {
+      this.selectedfilter = a;
+    });
+  },
+  computed: {
+    // name() {
+    //   return this.$store.state.name;
+    // },
+    ...mapState(['name', 'age', 'likes']),
+    ...mapState({ 변경할변수명: 'name' }),
+  },
   methods: {
+    ...mapMutations(['addage']),
+    now() {
+      return new Date();
+    },
     more() {
       axios
         // .get('https://codingapple1.github.io/vue/more' +this.moreBtnCount +'.json')

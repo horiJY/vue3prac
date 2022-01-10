@@ -1,9 +1,11 @@
 <template>
-  <!-- <p>{{ f }}</p> -->
   <div
     :class="f + ' filter-item'"
     :style="{ backgroundImage: `url(${uploadimg})` }"
-  />
+    @click="fire"
+  >
+    <slot> </slot>
+  </div>
 </template>
 
 <script>
@@ -12,6 +14,11 @@ export default {
   props: {
     uploadimg: String,
     f: String,
+  },
+  methods: {
+    fire() {
+      this.emitter.emit('selectfilter', this.f);
+    },
   },
 };
 </script>
