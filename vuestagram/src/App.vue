@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <!-- <div class="header">
     <ul class="header-button-left">
       <li @click="step = 0">Back</li>
       <li @click="step = 3">MyPage</li>
@@ -9,15 +9,10 @@
       <li v-if="step == 2" @click="publish">발행</li>
     </ul>
     <img src="./assets/logo.png" class="logo" />
-    <!-- <h4>안녕 {{ $store.state.name }} ({{ $store.state.age }})</h4> -->
-    <!--<button @click="$store.commit('changename')">name 수정</button>
-    <button @click="$store.commit('addage', 10)">age 증가</button> -->
-    <!-- <button @click="addage(10)">age 증가</button> -->
-  </div>
-  <!-- <p>{{ now() }} {{ moreBtnCount }}</p> -->
-  <!-- <p>{{ now2 }}</p> -->
-  <!-- <button @click="moreBtnCount++">now 테스트</button> -->
-  <Container
+  </div> -->
+  {{ $store.state.posts }}
+  {{ $store.state.step }}
+  <!-- <Container
     :postdatas="postdatas"
     :step="step"
     :uploadimg="uploadimg"
@@ -25,10 +20,7 @@
     @write="writeContent = $event"
   />
 
-  <!-- <Container :postdatas="$store.state.more" :step="step" /> -->
-  <!-- <p>{{ $store.state.more }}</p> -->
   <button v-if="step == 0" @click="more">더 보기</button>
-  <!-- <button v-if="step == 0" @click="$store.dispatch('getMore')">더 보기</button> -->
 
   <div class="footer">
     <ul class="footer-button-plus">
@@ -39,86 +31,71 @@
         class="inputfile"
         @change="upload"
       />
+
       <label for="file" class="input-plus">+</label>
-    </ul>
-  </div>
+    </ul> -->
+  <!-- </div> -->
 </template>
 
 <script>
-import container from '@/components/Container.vue';
-import postDatas from '@/assets/postdatas.js';
+// import container from '@/components/Container.vue';
+// import store from 'vuex';
 import axios from 'axios';
-import { mapState, mapMutations } from 'vuex';
 
 export default {
   name: 'App',
   components: {
-    Container: container,
-  },
-  data() {
-    return {
-      postdatas: postDatas,
-      moreBtnCount: 0,
-      step: 0,
-      uploadimg: '',
-      writeContent: '',
-      selectedfilter: '',
-    };
+    // Container: container,
   },
   mounted() {
-    this.emitter.on('selectfilter', (a) => {
-      this.selectedfilter = a;
-    });
+    axios
+      .get('http://172.30.1.17:8080/post')
+      .then((a) => {
+        console.log('proxyRequest res', a);
+        this.$store.commit('setPost', a.data);
+      })
+      .catch((err) => {
+        alert(err);
+      });
   },
-  computed: {
-    // name() {
-    //   return this.$store.state.name;
-    // },
-    ...mapState(['name', 'age', 'likes']),
-    ...mapState({ 변경할변수명: 'name' }),
-  },
-  methods: {
-    ...mapMutations(['addage']),
-    now() {
-      return new Date();
-    },
-    more() {
-      axios
-        // .get('https://codingapple1.github.io/vue/more' +this.moreBtnCount +'.json')
-        .get(`https://codingapple1.github.io/vue/more${this.moreBtnCount}.json`)
-        .then((result) => {
-          this.postdatas.push(result.data);
-          this.moreBtnCount++;
-        })
-        .catch((err) => {
-          alert(err);
-        });
-    },
-    upload(e) {
-      let imgfile = e.target.files;
-      // console.log(imgfile[0]);
-      // console.log(imgfile[0].type);
-      let uploadUrl = URL.createObjectURL(imgfile[0]);
-      // console.log(uploadUrl);
-      this.uploadimg = uploadUrl;
-      // console.log(this.uploadImg);
-      this.step = 1;
-    },
-    publish() {
-      var newpost = {
-        name: 'JY',
-        userImage: 'https://placeimg.com/100/100/arch',
-        postImage: this.uploadimg,
-        likes: 0,
-        date: 'May 15',
-        liked: false,
-        content: this.writeContent,
-        filter: 'perpetua',
-      };
-      this.postdatas.unshift(newpost);
-      this.step = 0;
-    },
-  },
+  // methods: {
+  //   more() {
+  //     // axios
+  //     //   // .get('https://codingapple1.github.io/vue/more' +this.moreBtnCount +'.json')
+  //     //   .get(`https://codingapple1.github.io/vue/more${this.moreBtnCount}.json`)
+  //     //   .then((result) => {
+  //     //     this.postdatas.push(result.data);
+  //     //     this.moreBtnCount++;
+  //     //   })
+  //     //   .catch((err) => {
+  //     //     alert(err);
+  //     //   });
+  //   },
+  //   upload(e) {
+  //     let imgfile = e.target.files;
+  //     // console.log(imgfile[0]);
+  //     // console.log(imgfile[0].type);
+  //     let uploadUrl = URL.createObjectURL(imgfile[0]);
+  //     // console.log(uploadUrl);
+  //     this.uploadimg = uploadUrl;
+  //     // console.log(this.uploadImg);
+  //     this.step = 1;
+  //   },
+  //   publish() {
+  //     var newpost = {
+  //       name: 'JY',
+  //       userImage: 'https://placeimg.com/100/100/arch',
+  //       postImage: this.uploadimg,
+  //       likes: 0,
+  //       date: 'May 15',
+  //       liked: false,
+  //       content: this.writeContent,
+  //       filter: 'perpetua',
+  //     };
+  //     this.postdatas.unshift(newpost);
+  //     this.step = 0;
+  //   },
+  // },
 };
 </script>
 

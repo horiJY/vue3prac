@@ -1,44 +1,39 @@
-import { createStore, mapMutations } from 'vuex';
+import { createStore } from 'vuex';
 import axios from 'axios';
 
 const store = createStore({
   state() {
     return {
-      name: 'jy',
-      age: 20,
-      likes: 0,
-      liked: false,
-      more: {},
+      step: 0,
+      posts: [],
+      uploadpost: [],
     };
   },
-
   mutations: {
-    clicklike(state) {
-      if (state.liked == false) {
-        state.likes++;
-        state.liked = true;
-      } else {
-        state.likes--;
-        state.liked = false;
-      }
+    setPost(state, data) {
+      state.posts = data;
     },
+    // clicklike(state) {
+    //   if (state.liked == false) {
+    //     state.likes++;
+    //     state.liked = true;
+    //   } else {
+    //     state.likes--;
+    //     state.liked = false;
+    //   }
+    // },
     // state 수정 정의하는 곳
-    changename(state) {
-      state.name = '재영';
-    },
-    addage(state, payload) {
-      state.age += payload;
-    },
-    setMore(state, data) {
-      state.more = data;
-    },
+    // setMore(state, data) {
+    //   state.more = data;
+    // },
   },
 
   actions: {
-    getMore(context) {
+    // getMore(context) {
+    getMore() {
       axios.get('https://codingapple1.github.io/vue/more0.json').then((a) => {
         console.log(a);
-        context.commit('setMore', a.data);
+        // context.commit('setMore', a.data);
       });
     },
   },

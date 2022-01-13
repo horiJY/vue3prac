@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import mitt from 'mitt';
+import store from './store.js';
 
 let emitter = mitt();
 let app = createApp(App);
@@ -9,7 +10,4 @@ let app = createApp(App);
 // 변수보관함에 emitter : emitter 라고 추가한 것
 // 다른 컴포넌트에서 자주쓰는 라이브러리가 있으면 여기에 추가하면 됨
 app.config.globalProperties.emitter = emitter;
-
-import store from './store.js';
-
 app.use(store).mount('#app');
