@@ -1,8 +1,8 @@
 <template>
   <div
-    :class="f + ' filter-item'"
+    :class="filter + ' filter-item'"
     :style="{ backgroundImage: `url(${uploadimg})` }"
-    @click="fire"
+    @click="choice"
   >
     <slot> </slot>
   </div>
@@ -10,14 +10,14 @@
 
 <script>
 export default {
-  name: 'FilterBox',
+  name: "FilterBox",
   props: {
     uploadimg: String,
-    f: String,
+    filter: String,
   },
   methods: {
-    fire() {
-      this.emitter.emit('selectfilter', this.f);
+    choice() {
+      this.emitter.emit("selectfilter", this.filter);
     },
   },
 };
