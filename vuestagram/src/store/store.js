@@ -1,18 +1,16 @@
 import { createStore } from 'vuex';
 import axios from 'axios';
+import userStore from '@/store/modules/userStore.js';
 
 const store = createStore({
+  modules: {
+    userStore,
+  },
   state() {
     return {
       posts: [],
       uploadpost: [],
-      id: '',
     };
-  },
-  getters: {
-    loginCount: (state) => {
-      return state.id;
-    },
   },
   mutations: {
     setPost(state, data) {
@@ -29,21 +27,18 @@ const store = createStore({
           alert(err);
         });
     },
-    // clicklike(state) {
-    //   if (state.liked == false) {
-    //     state.likes++;
-    //     state.liked = true;
-    //   } else {
-    //     state.likes--;
-    //     state.liked = false;
-    //   }
-    // },
-    // state 수정 정의하는 곳
-    // setMore(state, data) {
-    //   state.more = data;
-    // },
+    clicklike(state, data) {
+      console.log(state);
+      console.log(data);
+      // if (state.liked == false) {
+      //   state.likes++;
+      //   state.liked = true;
+      // } else {
+      //   state.likes--;
+      //   state.liked = false;
+      // }
+    },
   },
-
   actions: {
     publish(context, data) {
       context.commit('createPost', data);

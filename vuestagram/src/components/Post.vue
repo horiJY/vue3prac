@@ -8,7 +8,7 @@
       class="post-body"
       :class="post.filter"
       :style="{ backgroundImage: `url(${post.postimage})` }"
-      @click="$store.commit('clicklike')"
+      @click="clicklike"
     />
     <div class="post-content">
       <p>{{ post.likes }} Likes</p>
@@ -25,6 +25,16 @@ export default {
   name: "Card",
   props: {
     post: Object,
+  },
+  data() {
+    return {
+      id: this.post.id,
+    };
+  },
+  methods: {
+    clicklike() {
+      console.log(this.id);
+    },
   },
 };
 </script>

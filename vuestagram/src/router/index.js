@@ -1,7 +1,16 @@
 import { createWebHistory, createRouter } from 'vue-router';
 import Login from '@/views/Login';
 import Vuesta from '@/views/Vuesta';
-import { Store } from '@/store/store.js';
+import store from '@/store/store';
+
+const Authentication = () => (to, from, next) => {
+  if (!store.getters['userStore/getIsAuth']) {
+    alert('로그인이 필요합니다.');
+    next('/');
+  } else {
+    next();
+  }
+};
 
 const routes = [
   {
@@ -11,14 +20,7 @@ const routes = [
   {
     path: '/vuesta',
     component: Vuesta,
-    beforeEnter: () => {
-      let check = Store.getters['loginCount'];
-      alert(check);
-      // if (Store.state.id == '') {
-      //   alert('로그인 해주세요');
-      //   return '/';
-      // }
-    },
+    beforeEnter: Authentication(),
   },
 ];
 

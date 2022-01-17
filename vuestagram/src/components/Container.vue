@@ -12,12 +12,7 @@
       :style="{ backgroundImage: `url(${uploadimg})` }"
     />
     <div class="filters">
-      <FilterBox
-        v-for="f in filters"
-        :key="f"
-        :filter="f"
-        :uploadimg="uploadimg"
-      >
+      <FilterBox v-for="f in filters" :key="f" :filter="f" :uploadimg="uploadimg">
         <span style="color: black"> {{ f }} </span>
       </FilterBox>
     </div>
@@ -44,12 +39,12 @@
 </template>
 
 <script>
-import Post from '@/components/Post';
-import FilterBox from '@/components/FilterBox';
-import MyPage from '@/components/MyPage';
+import Post from "@/components/Post";
+import FilterBox from "@/components/FilterBox";
+import MyPage from "@/components/MyPage";
 
 export default {
-  name: 'Container',
+  name: "Container",
   components: {
     Post,
     FilterBox,
@@ -62,33 +57,34 @@ export default {
   },
   data() {
     return {
+      postNum: 0,
       filters: [
-        'aden',
-        '_1977',
-        'brannan',
-        'brooklyn',
-        'clarendon',
-        'earlybird',
-        'gingham',
-        'hudson',
-        'inkwell',
-        'kelvin',
-        'lark',
-        'lofi',
-        'maven',
-        'mayfair',
-        'moon',
-        'nashville',
-        'perpetua',
-        'reyes',
-        'rise',
-        'slumber',
-        'stinson',
-        'toaster',
-        'valencia',
-        'walden',
-        'willow',
-        'xpro2',
+        "aden",
+        "_1977",
+        "brannan",
+        "brooklyn",
+        "clarendon",
+        "earlybird",
+        "gingham",
+        "hudson",
+        "inkwell",
+        "kelvin",
+        "lark",
+        "lofi",
+        "maven",
+        "mayfair",
+        "moon",
+        "nashville",
+        "perpetua",
+        "reyes",
+        "rise",
+        "slumber",
+        "stinson",
+        "toaster",
+        "valencia",
+        "walden",
+        "willow",
+        "xpro2",
       ],
     };
   },
