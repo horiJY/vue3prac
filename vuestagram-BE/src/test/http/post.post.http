@@ -1,0 +1,10 @@
+POST http://localhost:8080/post
+Content-Type: application/json
+
+{
+  "user":"test",
+  "postimage":"test",
+  "filter":"test",
+  "content":"test",
+  "date":"test"
+}
