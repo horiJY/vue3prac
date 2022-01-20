@@ -3,6 +3,8 @@ import App from './App.vue';
 import mitt from 'mitt';
 import store from './store/store.js';
 import router from './router/index.js';
+// eslint-disable-next-line no-unused-vars
+import axios from '@/api/axios.js';
 
 let emitter = mitt();
 let app = createApp(App);

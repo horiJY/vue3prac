@@ -5,6 +5,7 @@
     @click="choice"
   >
     <slot> </slot>
+    <!-- slot 태그는 상위 컴포넌트 태그 사이에 들어가있는 내용 전체를 넣어준다. -->
   </div>
 </template>
 

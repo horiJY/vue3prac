@@ -5,13 +5,16 @@
       <li v-if="step != 0" @click="step = 0">Cancel</li>
     </ul>
     <ul class="header-button-right">
+      <li v-if="step == 0" @click="logoutBtn">Logout</li>
       <li v-if="step == 1" @click="if (step < 2) step++;">Next</li>
       <li v-if="step == 2" @click="publish">발행</li>
     </ul>
     <img src="@/assets/logo.png" class="logo" @click="step = 0" />
   </div>
 
+  <p v-if="isLoading == false">데이터를 가져오는 중입니다...🔍🔍🔍</p>
   <Container
+    v-if="isLoading == true"
     :step="step"
     :uploadimg="uploadimg"
     :selectedfilter="selectedfilter"
@@ -39,6 +42,7 @@
 <script>
 import Container from "@/components/Container.vue";
 import axios from "axios";
+import { mapActions } from "vuex";
 
 export default {
   name: "App",
@@ -51,25 +55,33 @@ export default {
       uploadimg: "",
       selectedfilter: "",
       writecontent: "",
+      isLoading: false,
     };
   },
   mounted() {
-    axios
-      .get("http://172.30.1.17:8080/post")
-      .then((a) => {
-        // console.log("Request res", a);
-        this.$store.commit("setPost", a.data);
-      })
-      .catch((err) => {
-        alert(err);
+    setTimeout(() => {
+      axios
+        .get("http://172.30.1.17:8080/post")
+        .then((a) => {
+          // console.log("Request res", a);
+          this.$store.commit("setPost", a.data);
+          this.isLoading = true;
+        })
+        .catch((err) => {
+          alert(err);
+        });
+      // 필터선택
+      this.emitter.on("selectfilter", (a) => {
+        this.selectedfilter = a;
       });
-
-    // 필터선택
-    this.emitter.on("selectfilter", (a) => {
-      this.selectedfilter = a;
-    });
+    }, 1500);
   },
   methods: {
+    ...mapActions("userStore", ["logout"]),
+    logoutBtn() {
+      this.logout();
+      this.$router.push("/");
+    },
     //   more() {
     //     // axios
     //     //   // .get('https://codingapple1.github.io/vue/more' +this.moreBtnCount +'.json')

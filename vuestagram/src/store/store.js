@@ -10,6 +10,7 @@ const store = createStore({
     return {
       posts: [],
       uploadpost: [],
+      LoadingStatus: false,
     };
   },
   mutations: {
@@ -28,8 +29,8 @@ const store = createStore({
         });
     },
     clicklike(state, data) {
-      console.log(state);
-      console.log(data);
+      console.log('store clicklike state', state);
+      console.log('store clicklike data', data);
       // if (state.liked == false) {
       //   state.likes++;
       //   state.liked = true;
@@ -37,6 +38,12 @@ const store = createStore({
       //   state.likes--;
       //   state.liked = false;
       // }
+    },
+    startSpinner(state) {
+      state.LoadingStatus = true;
+    },
+    endSpinner(state) {
+      state.LoadingStatus = false;
     },
   },
   actions: {

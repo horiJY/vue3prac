@@ -2,6 +2,7 @@
   <div>
     <div v-if="step == 0">
       <Post v-for="post in $store.state.posts" :key="post" :post="post" />
+      <!-- <Comment v-for="comment in $store.state.comment" :key="comment" :comment="comment"/> -->
     </div>
   </div>
   <div v-if="step == 1">

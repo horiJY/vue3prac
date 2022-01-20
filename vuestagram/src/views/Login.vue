@@ -25,7 +25,7 @@
 </template>
 
 <script>
-// import axios from "axios";
+import axios from "axios";
 import { mapActions } from "vuex";
 
 export default {
@@ -40,16 +40,32 @@ export default {
   methods: {
     ...mapActions("userStore", ["login"]),
     async loginSubmit() {
-      let saveData = {};
-      saveData.id = this.userId;
-      saveData.password = this.userPassword;
-      if (saveData.id != null && saveData.password != null) {
-        await this.login(saveData);
-        if (this.$store.getters["userStore/getIsAuth"]) {
-          this.$router.push("/vuesta");
-        } else {
-          this.message = this.$store.getters["userStore/getErrorState"];
+      try {
+        let loginData = {};
+        loginData.id = this.userId;
+        loginData.password = this.userPassword;
+        if (loginData.id != null && loginData.password != null) {
+          let storeResult = await axios
+            .post("http://172.30.1.17:8080/signin", loginData)
+            .then((res) => {
+              this.$store.state.loading = true;
+              if (res.data) {
+                this.login(loginData.id);
+                return true;
+              } else {
+                this.message = "ID, PW를 다시 확인해 주세요.";
+                return false;
+              }
+            })
+            .catch(() => {
+              this.message = "서버와 연결할 수 없습니다.";
+            });
+          if (storeResult) {
+            this.$router.push("/vuesta");
+          }
         }
+      } catch (error) {
+        alert(error);
       }
     },
   },
