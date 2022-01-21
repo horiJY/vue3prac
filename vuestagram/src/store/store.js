@@ -1,19 +1,20 @@
 import { createStore } from 'vuex';
 import axios from 'axios';
+import userStore from '@/store/modules/userStore.js';
 
 const store = createStore({
+  modules: {
+    userStore,
+  },
+
   state() {
     return {
       posts: [],
       uploadpost: [],
-      id: '',
+      LoadingStatus: false,
     };
   },
-  getters: {
-    loginCount: (state) => {
-      return state.id;
-    },
-  },
+
   mutations: {
     setPost(state, data) {
       state.posts = data;
@@ -29,21 +30,24 @@ const store = createStore({
           alert(err);
         });
     },
-    // clicklike(state) {
-    //   if (state.liked == false) {
-    //     state.likes++;
-    //     state.liked = true;
-    //   } else {
-    //     state.likes--;
-    //     state.liked = false;
-    //   }
-    // },
-    // state 수정 정의하는 곳
-    // setMore(state, data) {
-    //   state.more = data;
-    // },
+    clicklike(state, data) {
+      console.log('store clicklike state', state);
+      console.log('store clicklike data', data);
+      // if (state.liked == false) {
+      //   state.likes++;
+      //   state.liked = true;
+      // } else {
+      //   state.likes--;
+      //   state.liked = false;
+      // }
+    },
+    startSpinner(state) {
+      state.LoadingStatus = true;
+    },
+    endSpinner(state) {
+      state.LoadingStatus = false;
+    },
   },
-
   actions: {
     publish(context, data) {
       context.commit('createPost', data);

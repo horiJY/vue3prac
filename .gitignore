@@ -29,3 +29,7 @@ node_modules/
 dist/
 npm-debug.log
 yarn-error.log
+
+jyclou_gitkraken_rsa
+
+*.pub
