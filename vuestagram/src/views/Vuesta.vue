@@ -58,7 +58,7 @@ export default {
       isLoading: false,
     };
   },
-  mounted() {
+  created() {
     setTimeout(() => {
       axios
         .get("http://172.30.1.17:8080/post")
