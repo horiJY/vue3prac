@@ -6,6 +6,7 @@ const store = createStore({
   modules: {
     userStore,
   },
+
   state() {
     return {
       posts: [],
@@ -13,6 +14,7 @@ const store = createStore({
       LoadingStatus: false,
     };
   },
+
   mutations: {
     setPost(state, data) {
       state.posts = data;
