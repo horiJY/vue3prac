@@ -43,7 +43,6 @@ public class VuestaController {
     @PostMapping("/follower")
     public List<FollowDto> followerListFind(@RequestBody Map<String,String> id){
         log.info("Post /follower");
-        log.info("Param:" + id.get("id"));
         return vuestaService.findFollower(id.get("id"));
     }
 

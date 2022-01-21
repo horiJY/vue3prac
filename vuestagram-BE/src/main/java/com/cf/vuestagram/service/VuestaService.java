@@ -1,5 +1,6 @@
 package com.cf.vuestagram.service;
 
+import com.cf.vuestagram.dto.CommentDto;
 import com.cf.vuestagram.dto.CreatePostDto;
 import com.cf.vuestagram.dto.PostDto;
 import com.cf.vuestagram.dto.UserAuthDto;
@@ -10,6 +11,7 @@ import com.cf.vuestagram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -18,8 +20,13 @@ public class VuestaService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
+    private final CommentRepository commentRepository;
 
     public List<PostDto> findPost() {
+        // List<PostDto> posts = postRepository.findAll();
+        // for (PostDto n : posts){
+        //     List<CommentDto> comments = commentRepository.findByPostId(n.getId());
+        // }
         return postRepository.findAll();
     }
 
@@ -28,10 +35,10 @@ public class VuestaService {
     }
 
     public boolean findUser(UserAuthDto req) {
-        return userRepository.selectUser(req);
+        return userRepository.findByUserId(req);
     }
 
-    public List<FollowDto> findFollower(String id) {return userRepository.findById(id);
+    public List<FollowDto> findFollower(String req) {return userRepository.findById(req);
     }
 
     public boolean checkFollower(String followeeId, String followerId){

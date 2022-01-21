@@ -1,6 +1,5 @@
 package com.cf.vuestagram.repository;
 
-import com.cf.vuestagram.Entity.Post;
 import com.cf.vuestagram.dto.CreatePostDto;
 import com.cf.vuestagram.dto.PostDto;
 import com.cf.vuestagram.mapper.PostMapper;

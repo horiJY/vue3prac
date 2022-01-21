@@ -5,7 +5,6 @@ import com.cf.vuestagram.dto.FollowDto;
 import com.cf.vuestagram.mapper.UserMapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Repository
@@ -16,9 +15,7 @@ public class UserRepository {
         this.mapper = mapper;
     }
 
-    public boolean selectUser(UserAuthDto req) {
-//        System.out.println(mapper.selectPosts());
-
+    public boolean findByUserId(UserAuthDto req) {
         if (mapper.selectUser(req) != 0)
             return true;
         else
