@@ -1,121 +1,118 @@
 <template>
   <div class="header">
     <ul class="header-button-left">
-      <li @click="step = 0">Back</li>
-      <li @click="step = 3">MyPage</li>
+      <li v-if="step == 0" @click="step = 3">Follwer</li>
+      <li v-if="step != 0" @click="step = 0">Cancel</li>
     </ul>
     <ul class="header-button-right">
       <li v-if="step == 1" @click="if (step < 2) step++;">Next</li>
       <li v-if="step == 2" @click="publish">발행</li>
     </ul>
-    <img src="./assets/logo.png" class="logo" />
-    <!-- <h4>안녕 {{ $store.state.name }} ({{ $store.state.age }})</h4> -->
-    <!--<button @click="$store.commit('changename')">name 수정</button>
-    <button @click="$store.commit('addage', 10)">age 증가</button> -->
-    <!-- <button @click="addage(10)">age 증가</button> -->
+    <img src="@/assets/logo.png" class="logo" @click="step = 0" />
   </div>
-  <!-- <p>{{ now() }} {{ moreBtnCount }}</p> -->
-  <!-- <p>{{ now2 }}</p> -->
-  <!-- <button @click="moreBtnCount++">now 테스트</button> -->
+
   <Container
-    :postdatas="postdatas"
     :step="step"
     :uploadimg="uploadimg"
     :selectedfilter="selectedfilter"
-    @write="writeContent = $event"
+    @write="writecontent = $event"
   />
 
-  <!-- <Container :postdatas="$store.state.more" :step="step" /> -->
-  <!-- <p>{{ $store.state.more }}</p> -->
-  <button v-if="step == 0" @click="more">더 보기</button>
-  <!-- <button v-if="step == 0" @click="$store.dispatch('getMore')">더 보기</button> -->
+  <!-- <button v-if="step == 0" @click="more">더 보기</button>-->
 
   <div class="footer">
-    <ul class="footer-button-plus">
+    <ul v-if="step == 0" class="footer-button-plus">
       <input
         id="file"
         multiple
         type="file"
         class="inputfile"
+        :uploadimg="uploadimg"
         @change="upload"
       />
+
       <label for="file" class="input-plus">+</label>
     </ul>
   </div>
 </template>
 
 <script>
-import container from '@/components/Container.vue';
-import postDatas from '@/assets/postdatas.js';
-import axios from 'axios';
-import { mapState, mapMutations } from 'vuex';
+import Container from "@/components/Container.vue";
+import axios from "axios";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Container: container,
+    Container,
   },
   data() {
     return {
-      postdatas: postDatas,
-      moreBtnCount: 0,
       step: 0,
-      uploadimg: '',
-      writeContent: '',
-      selectedfilter: '',
+      uploadimg: "",
+      selectedfilter: "",
+      writecontent: "",
     };
   },
   mounted() {
-    this.emitter.on('selectfilter', (a) => {
+    axios
+      .get("http://172.30.1.17:8080/post")
+      .then((a) => {
+        // console.log("Request res", a);
+        this.$store.commit("setPost", a.data);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+
+    // 필터선택
+    this.emitter.on("selectfilter", (a) => {
       this.selectedfilter = a;
     });
   },
-  computed: {
-    // name() {
-    //   return this.$store.state.name;
-    // },
-    ...mapState(['name', 'age', 'likes']),
-    ...mapState({ 변경할변수명: 'name' }),
-  },
   methods: {
-    ...mapMutations(['addage']),
-    now() {
-      return new Date();
-    },
-    more() {
-      axios
-        // .get('https://codingapple1.github.io/vue/more' +this.moreBtnCount +'.json')
-        .get(`https://codingapple1.github.io/vue/more${this.moreBtnCount}.json`)
-        .then((result) => {
-          this.postdatas.push(result.data);
-          this.moreBtnCount++;
-        })
-        .catch((err) => {
-          alert(err);
-        });
-    },
+    //   more() {
+    //     // axios
+    //     //   // .get('https://codingapple1.github.io/vue/more' +this.moreBtnCount +'.json')
+    //     //   .get(`https://codingapple1.github.io/vue/more${this.moreBtnCount}.json`)
+    //     //   .then((result) => {
+    //     //     this.postdatas.push(result.data);
+    //     //     this.moreBtnCount++;
+    //     //   })
+    //     //   .catch((err) => {
+    //     //     alert(err);
+    //     //   });
+    //   },
     upload(e) {
       let imgfile = e.target.files;
-      // console.log(imgfile[0]);
-      // console.log(imgfile[0].type);
       let uploadUrl = URL.createObjectURL(imgfile[0]);
-      // console.log(uploadUrl);
       this.uploadimg = uploadUrl;
-      // console.log(this.uploadImg);
       this.step = 1;
     },
     publish() {
-      var newpost = {
-        name: 'JY',
-        userImage: 'https://placeimg.com/100/100/arch',
-        postImage: this.uploadimg,
-        likes: 0,
-        date: 'May 15',
-        liked: false,
-        content: this.writeContent,
-        filter: 'perpetua',
+      const monthNames = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      let date = new Date();
+      let newpost = {
+        user: "JY",
+        postimage: this.uploadimg.substr(5),
+        filter: this.selectedfilter,
+        date: monthNames[date.getMonth()] + " " + date.getDate(),
+        content: this.writecontent,
       };
-      this.postdatas.unshift(newpost);
+      console.log("upload post", newpost);
+      this.$store.dispatch("publish", newpost);
       this.step = 0;
     },
   },
@@ -190,7 +187,7 @@ ul {
 }
 #app {
   box-sizing: border-box;
-  font-family: 'consolas';
+  font-family: "consolas";
   margin-top: 60px;
   width: 100%;
   max-width: 460px;
