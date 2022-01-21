@@ -21,7 +21,8 @@ const store = createStore({
     },
     createPost(state, newpost) {
       axios
-        .post('http://172.30.1.17:8080/post', newpost)
+        .post('/post', newpost)
+        // .post('http://172.30.1.17:8080/post', newpost)
         .then((a) => {
           console.log('store createPost', a.data);
           state.posts.unshift(a.data);

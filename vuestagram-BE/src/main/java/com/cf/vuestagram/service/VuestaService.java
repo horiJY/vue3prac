@@ -2,7 +2,8 @@ package com.cf.vuestagram.service;
 
 import com.cf.vuestagram.dto.CreatePostDto;
 import com.cf.vuestagram.dto.PostDto;
-import com.cf.vuestagram.dto.UserDto;
+import com.cf.vuestagram.dto.UserAuthDto;
+import com.cf.vuestagram.dto.FollowDto;
 import com.cf.vuestagram.repository.FollowRepository;
 import com.cf.vuestagram.repository.PostRepository;
 import com.cf.vuestagram.repository.UserRepository;
@@ -26,11 +27,11 @@ public class VuestaService {
          return postRepository.save(req);
     }
 
-    public boolean findUser(UserDto req) {
+    public boolean findUser(UserAuthDto req) {
         return userRepository.selectUser(req);
     }
 
-    public List<String> findFollower(String id) {return userRepository.findById(id);
+    public List<FollowDto> findFollower(String id) {return userRepository.findById(id);
     }
 
     public boolean checkFollower(String followeeId, String followerId){

@@ -4,19 +4,20 @@
     <div></div>
     <div></div>
   </div>
+  <p v-if="loading">데이터를 가져오는 중입니다🔍🔍🔍</p>
 </template>
 <script>
 export default {
   props: {
     loading: Boolean,
-    // {
+    // loading : {
     //   type: Boolean,
     //   required: true,
     // },
   },
 };
 </script>
-<style>
+<style scoped>
 .spinner {
   display: inline-block;
   position: absolute;
@@ -55,5 +56,8 @@ export default {
     top: 19px;
     height: 25px;
   }
+}
+p {
+  text-align: center;
 }
 </style>

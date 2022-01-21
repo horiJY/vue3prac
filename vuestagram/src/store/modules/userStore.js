@@ -28,7 +28,7 @@ const userStore = {
     login(context, data) {
       if (data) {
         // // 로그인 성공시 처리해줘야할 부분
-        context.commit('UID', data.id);
+        context.commit('UID', data);
         context.commit('IS_AUTH', true);
       } else {
         context.commit('IS_AUTH', false);

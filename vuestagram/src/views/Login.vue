@@ -41,14 +41,16 @@ export default {
     ...mapActions("userStore", ["login"]),
     async loginSubmit() {
       try {
+        // console.log("......", process.env.NODE_ENV);
         let loginData = {};
         loginData.id = this.userId;
         loginData.password = this.userPassword;
         if (loginData.id != null && loginData.password != null) {
           let storeResult = await axios
-            .post("http://172.30.1.17:8080/signin", loginData)
+            .post("/signin", loginData)
+            // .post("http://172.30.1.17:8080/signin", loginData)
             .then((res) => {
-              this.$store.state.loading = true;
+              // this.$store.state.loading = true;
               if (res.data) {
                 this.login(loginData.id);
                 return true;
@@ -60,6 +62,7 @@ export default {
             .catch(() => {
               this.message = "서버와 연결할 수 없습니다.";
             });
+
           if (storeResult) {
             this.$router.push("/vuesta");
           }

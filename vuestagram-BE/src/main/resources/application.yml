@@ -1,3 +1,5 @@
+server:
+  port: 3000
 Spring:
   h2:
     console:
@@ -5,7 +7,7 @@ Spring:
       path: /h2
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:file:/Users/jaeyounglee/Desktop/git-local/vuestagram-BE/vuestadb;auto_server=true
+    url: jdbc:h2:file:~/vuestadb;auto_server=true
     username: test
     password:
 
@@ -21,6 +23,7 @@ Spring:
 
   sql:
     init:
+      encoding: UTF-8
       mode: always
       data-locations: classpath:data.sql
 #      schema-locations: classpath:schema.sql

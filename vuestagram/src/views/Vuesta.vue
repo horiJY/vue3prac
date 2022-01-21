@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <ul class="header-button-left">
-      <li v-if="step == 0" @click="step = 3">Follwer</li>
+      <li v-if="step == 0" @click="step = 3">Follow</li>
       <li v-if="step != 0" @click="step = 0">Cancel</li>
     </ul>
     <ul class="header-button-right">
@@ -12,9 +12,7 @@
     <img src="@/assets/logo.png" class="logo" @click="step = 0" />
   </div>
 
-  <p v-if="isLoading == false">데이터를 가져오는 중입니다...🔍🔍🔍</p>
   <Container
-    v-if="isLoading == true"
     :step="step"
     :uploadimg="uploadimg"
     :selectedfilter="selectedfilter"
@@ -55,17 +53,16 @@ export default {
       uploadimg: "",
       selectedfilter: "",
       writecontent: "",
-      isLoading: false,
     };
   },
   created() {
     setTimeout(() => {
       axios
-        .get("http://172.30.1.17:8080/post")
+        .get("/post")
+        // .get("http://172.30.1.17:8080/post")
         .then((a) => {
           // console.log("Request res", a);
           this.$store.commit("setPost", a.data);
-          this.isLoading = true;
         })
         .catch((err) => {
           alert(err);
