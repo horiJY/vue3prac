@@ -38,46 +38,46 @@
 </template>
 
 <script>
-import Container from "@/components/Container.vue";
-import axios from "axios";
-import { mapActions } from "vuex";
+import Container from '@/components/Container.vue';
+import axios from 'axios';
+import { mapActions } from 'vuex';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     Container,
   },
   data() {
     return {
       step: 0,
-      uploadimg: "",
-      selectedfilter: "",
-      writecontent: "",
+      uploadimg: '',
+      selectedfilter: '',
+      writecontent: '',
     };
   },
   created() {
     setTimeout(() => {
       axios
-        .get("/post")
+        .get('/post')
         // .get("http://172.30.1.17:8080/post")
         .then((a) => {
           // console.log("Request res", a);
-          this.$store.commit("setPost", a.data);
+          this.$store.commit('setPost', a.data);
         })
         .catch((err) => {
           alert(err);
         });
       // 필터선택
-      this.emitter.on("selectfilter", (a) => {
+      this.emitter.on('selectfilter', (a) => {
         this.selectedfilter = a;
       });
     }, 1500);
   },
   methods: {
-    ...mapActions("userStore", ["logout"]),
+    ...mapActions('userStore', ['logout']),
     logoutBtn() {
       this.logout();
-      this.$router.push("/");
+      this.$router.push('/');
     },
     //   more() {
     //     // axios
@@ -99,29 +99,29 @@ export default {
     },
     publish() {
       const monthNames = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
       ];
       let date = new Date();
       let newpost = {
-        user: this.$store.getters["userStore/getUid"],
+        user: this.$store.getters['userStore/getUid'],
         postimage: this.uploadimg.substr(5),
         filter: this.selectedfilter,
-        date: monthNames[date.getMonth()] + " " + date.getDate(),
+        date: monthNames[date.getMonth()] + ' ' + date.getDate(),
         content: this.writecontent,
       };
-      console.log("upload post", newpost);
-      this.$store.dispatch("publish", newpost);
+      console.log('upload post', newpost);
+      this.$store.dispatch('publish', newpost);
       this.step = 0;
     },
   },
@@ -196,7 +196,7 @@ ul {
 }
 #app {
   box-sizing: border-box;
-  font-family: "consolas";
+  font-family: 'consolas';
   margin-top: 60px;
   width: 100%;
   max-width: 460px;

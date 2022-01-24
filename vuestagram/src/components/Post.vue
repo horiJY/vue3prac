@@ -2,20 +2,32 @@
   <div class="post">
     <div class="post-header">
       <div class="profile" :style="{ backgroundImage: `url(${post.userimage})` }" />
-      <span class="profile-name">{{ post.name }}</span>
+      <span class="profile-name">{{ post.writer }}</span>
     </div>
     <div
+      v-if="`${post.mediatype}` == 'image'"
       class="post-body"
       :class="post.filter"
-      :style="{ backgroundImage: `url(${post.postimage})` }"
+      :style="{ backgroundImage: `url(${post.url})` }"
+      @click="clicklike"
+    />
+    <video
+      v-if="`${post.mediatype}` == 'video'"
+      class="post-body"
+      controls
+      loop
+      :src="`/${post.mediatype}/${post.url}`"
+      preload="auto"
       @click="clicklike"
     />
     <div class="post-content">
       <p>{{ post.likes }} Likes</p>
       <p>
-        <strong>{{ post.name }}</strong> {{ post.content }}
+        <strong>{{ post.writer }}</strong> {{ post.content }}
       </p>
-      <p class="date">{{ post.date }}</p>
+      <p class="date">
+        {{ post.date }}
+      </p>
     </div>
   </div>
 </template>
@@ -29,17 +41,39 @@ export default {
   data() {
     return {
       id: this.post.id,
+      lastScrollPosition: 0,
     };
+  },
+  mounted() {
+    window.addEventListener("scroll", this.onScroll);
+  },
+  beforeUnmount() {
+    window.removeEventListener("scroll", this.onScroll);
   },
   methods: {
     clicklike() {
       console.log(this.id);
     },
+    onScroll() {
+      const videoObj = document.querySelector("video");
+
+      const videoObjPosition = videoObj.offsetTop + videoObj.offsetHeight;
+      const currentScrollPosition = visualViewport.pageTop + visualViewport.height;
+      if (
+        this.lastScrollPosition - videoObjPosition < 0 ||
+        this.lastScrollPosition - videoObjPosition > videoObj.offsetHeight
+      ) {
+        videoObj.pause();
+      } else {
+        videoObj.play();
+      }
+      this.lastScrollPosition = currentScrollPosition;
+    },
   },
 };
 </script>
 
-<style>
+<style scope>
 .post {
   width: 100%;
 }
@@ -75,5 +109,9 @@ export default {
   font-size: 11px;
   color: grey;
   margin-top: -8px;
+}
+video {
+  width: 100%;
+  height: 100%;
 }
 </style>

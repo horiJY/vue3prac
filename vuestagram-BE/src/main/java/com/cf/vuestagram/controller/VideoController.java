@@ -23,15 +23,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Controller
 public class VideoController {
-    // private String url = "보여줄 비디오 url 경로";
+    private final String baseDir = "file:C:\\Users\\JY\\Desktop\\code\\vuesta-video\\";
 
     @GetMapping(value = "/video/{name}")
     public ResponseEntity<ResourceRegion> getVideo(@RequestHeader HttpHeaders headers, @PathVariable String name)
             throws IOException {
         // try {
         log.info("VideoController.getVideo");
-        UrlResource video = new UrlResource(
-                "file:C:\\Users\\JY\\Desktop\\code\\vuesta-video\\" + name + ".mp4");
+        UrlResource video = new UrlResource(baseDir + name + ".mp4");
         final long chunkSize = 1024 * 1024;
         long contentLength = video.contentLength();
         Optional<HttpRange> optional = headers.getRange().stream().findFirst();
