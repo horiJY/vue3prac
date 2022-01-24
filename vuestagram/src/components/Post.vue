@@ -3,6 +3,7 @@
     <div class="post-header">
       <div class="profile" :style="{ backgroundImage: `url(${post.userimage})` }" />
       <span class="profile-name">{{ post.writer }}</span>
+      <label class="" style="display: none">{{ post.id }}</label>
     </div>
     <div
       v-if="`${post.mediatype}` == 'image'"
@@ -34,9 +35,10 @@
 
 <script>
 export default {
-  name: "Card",
+  name: "Post",
   props: {
     post: Object,
+    index: Number,
   },
   data() {
     return {
@@ -45,7 +47,9 @@ export default {
     };
   },
   mounted() {
-    window.addEventListener("scroll", this.onScroll);
+    if (this.post.mediatype == "video") {
+      window.addEventListener("scroll", this.onScroll);
+    }
   },
   beforeUnmount() {
     window.removeEventListener("scroll", this.onScroll);
@@ -55,7 +59,8 @@ export default {
       console.log(this.id);
     },
     onScroll() {
-      const videoObj = document.querySelector("video");
+      const posts = document.getElementsByClassName("post");
+      const videoObj = posts[this.index].querySelector("video");
 
       const videoObjPosition = videoObj.offsetTop + videoObj.offsetHeight;
       const currentScrollPosition = visualViewport.pageTop + visualViewport.height;

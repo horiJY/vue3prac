@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="step == 0">
-      <Post v-for="post in $store.state.posts" :key="post" :post="post" />
+      <Post v-for="(post, i) in $store.state.posts" :key="i" :post="post" :index="i" />
       <!-- <Comment v-for="comment in $store.state.comment" :key="comment" :comment="comment"/> -->
     </div>
   </div>
