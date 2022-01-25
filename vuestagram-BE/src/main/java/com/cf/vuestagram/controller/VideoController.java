@@ -35,7 +35,7 @@ public class VideoController {
                 // try {
                 log.info("GET /video VideoController " + name);
                 UrlResource video = new UrlResource(baseDir + name + ".mp4");
-                final long chunkSize = 1024 * 1024;
+                final long chunkSize = 1024 * 1024; // 1mb
                 long contentLength = video.contentLength();
                 Optional<HttpRange> optional = headers.getRange().stream().findFirst();
                 ResourceRegion resourceRegion;
@@ -52,14 +52,11 @@ public class VideoController {
                         resourceRegion = new ResourceRegion(video, 0, rangeLength);
                 }
                 log.info("return", ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
-                                .contentType(
-                                                MediaTypeFactory.getMediaType(video)
-                                                                .orElse(MediaType.APPLICATION_OCTET_STREAM))
+                                .contentType(MediaTypeFactory.getMediaType(video).orElse(MediaType.APPLICATION_OCTET_STREAM))
                                 .body(resourceRegion));
+                                
                 return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
-                                .contentType(
-                                                MediaTypeFactory.getMediaType(video)
-                                                                .orElse(MediaType.APPLICATION_OCTET_STREAM))
+                                .contentType(MediaTypeFactory.getMediaType(video).orElse(MediaType.APPLICATION_OCTET_STREAM))
                                 .body(resourceRegion);
 
         }

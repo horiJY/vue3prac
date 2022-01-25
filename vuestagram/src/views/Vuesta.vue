@@ -98,7 +98,7 @@ export default {
     uploadFileCheck(p) {
       console.log(p);
       if (p.name.substr(p.name.indexOf(".")) == ".mp4") {
-        if (p.type.search(/^video\/*/) + 1) {
+        if (p.type.search(/^video\/*/) != -1) {
           if (p.size < 50 * 1024 * 1024) {
             return "video";
           } else {
@@ -106,7 +106,8 @@ export default {
           }
         }
       }
-      if (p.type.search(/^image\/*/) + 1) {
+
+      if (p.type.search(/^image\/*/) != -1) {
         if (p.size < 8 * 1024 * 1024) {
           return "image";
         } else {
