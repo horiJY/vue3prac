@@ -7,9 +7,9 @@ VALUES('Minny','image','https://placeimg.com/640/480/animals',49,'21 Apr 4',fals
 INSERT INTO POST(writer,mediatype,url,likes,date,liked,content,filter)
 VALUES('JY','video','test',77,'22 Jan 10',false,'우리집 개는 화장실 물도 내림','none');
 INSERT INTO POST(writer,mediatype,url,likes,date,liked,content,filter)
-VALUES('salmon_X','video','cutepuppy',2,'22 Jan 10',false,'비맞는 고양이😿','none');
+VALUES('salmon_X','video','rainCat',2,'22 Jan 10',false,'비맞는 고양이😿','none');
 INSERT INTO POST(writer,mediatype,url,likes,date,liked,content,filter)
-VALUES('_Limvely','video','rainCat',7777777,'22 Jan 10',false,'귀여운 강아지','none');
+VALUES('_Limvely','video','cutepuppy',7777777,'22 Jan 10',false,'귀여운 강아지','none');
 
 -- INSERT INTO POST(writer,postimage,likes,date,liked,content,filter)
 -- VALUES('Kim Hyun','https://placeimg.com/640/480/arch',36,'May 15',false,'오늘 무엇을 했냐면요 아무것도 안했어요 ?','perpetua');
