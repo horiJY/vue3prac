@@ -3,7 +3,8 @@
     <div class="comment-header">
       <span>댓 글</span>
     </div>
-    <div class="comment-body">
+    <div class="comment-body" />
+    <div class="comment-footer">
       <textarea type="text" placeholder="✈️ Add a comment..." />
       <span>Post</span>
     </div>
@@ -26,19 +27,19 @@
   background-position: center;
   background-size: cover;
 }
-.comment-body {
+.comment-footer {
   height: 30px;
   padding: 0 5%;
   width: 100%;
 }
-.comment-body textarea {
+.comment-footer textarea {
   width: 80%;
   height: 100%;
   font-size: 14px;
   border: solid 2px gainsboro;
   border-radius: 5px;
 }
-.comment-body span {
+.comment-footer span {
   height: 100%;
   padding-left: 3%;
   width: 5%;
