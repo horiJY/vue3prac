@@ -19,7 +19,7 @@
         </div>
         <p style="color: red">{{ message }}</p>
       </div>
-      <button style="color: #2c4f91" @click.prevent="loginSubmit">Login</button>
+      <button style="color: #2c4f91" @click.prevent="skip">Login</button>
     </form>
   </div>
 </template>
@@ -38,6 +38,10 @@ export default {
     };
   },
   methods: {
+    skip() {
+      this.login("JY");
+      this.$router.push("/vuesta");
+    },
     ...mapActions("userStore", ["login"]),
     async loginSubmit() {
       try {
@@ -66,6 +70,8 @@ export default {
           if (storeResult) {
             this.$router.push("/vuesta");
           }
+        } else {
+          this.message = "ID와 PW를 입력해 주세요";
         }
       } catch (error) {
         alert(error);

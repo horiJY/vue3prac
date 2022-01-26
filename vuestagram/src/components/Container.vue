@@ -5,15 +5,16 @@
       <!-- <Comment v-for="comment in $store.state.comment" :key="comment" :comment="comment"/> -->
     </div>
   </div>
-  <div v-if="step == 1">
+
+  <div v-if="step == 1 && uploadtype == 'image'">
     <!-- 필터선택페이지 필터값이 초기에는 없으므로 class와 :class를 분리-->
     <div
       class="upload-image"
       :class="selectedfilter"
-      :style="{ backgroundImage: `url(${uploadimg})` }"
+      :style="{ backgroundImage: `url(${uploadurl})` }"
     />
     <div class="filters">
-      <FilterBox v-for="f in filters" :key="f" :filter="f" :uploadimg="uploadimg">
+      <FilterBox v-for="f in filters" :key="f" :filter="f" :uploadurl="uploadurl">
         <span style="color: black"> {{ f }} </span>
       </FilterBox>
     </div>
@@ -22,14 +23,23 @@
   <div v-if="step == 2">
     <!-- 글작성페이지 -->
     <div
+      v-if="uploadtype == 'image'"
       :class="selectedfilter"
       class="upload-image"
-      :style="{ backgroundImage: `url(${uploadimg})` }"
+      :style="{ backgroundImage: `url(${uploadurl})` }"
+    />
+    <video
+      v-if="uploadtype == 'video'"
+      class="post-body"
+      autoplay
+      loop
+      :src="uploadurl"
+      preload="auto"
     />
     <div class="write">
       <textarea
         class="write-box"
-        placeholder="write! here!"
+        placeholder="content write! here!"
         @input="$emit('write', $event.target.value)"
       />
     </div>
@@ -53,8 +63,9 @@ export default {
   },
   props: {
     step: Number,
-    uploadimg: String,
+    uploadurl: String,
     selectedfilter: String,
+    uploadtype: String,
   },
   data() {
     return {
@@ -124,5 +135,9 @@ export default {
   margin: auto;
   display: block;
   outline: none;
+}
+.write-box::placeholder {
+  color: red;
+  font-weight: bold;
 }
 </style>

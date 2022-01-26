@@ -14,8 +14,9 @@
 
   <Container
     :step="step"
-    :uploadimg="uploadimg"
+    :uploadurl="uploadurl"
     :selectedfilter="selectedfilter"
+    :uploadtype="uploadtype"
     @write="writecontent = $event"
   />
 
@@ -23,14 +24,7 @@
 
   <div class="footer">
     <ul v-if="step == 0" class="footer-button-plus">
-      <input
-        id="file"
-        multiple
-        type="file"
-        class="inputfile"
-        :uploadimg="uploadimg"
-        @change="upload"
-      />
+      <input id="file" multiple type="file" class="inputfile" @change="upload" />
       <label for="file" class="input-plus">+</label>
     </ul>
   </div>
@@ -49,9 +43,11 @@ export default {
   data() {
     return {
       step: 0,
-      uploadimg: "",
+      uploadurl: "",
       selectedfilter: "",
       writecontent: "",
+      uploadtype: "none",
+      selectfile: [],
     };
   },
   created() {
@@ -72,9 +68,11 @@ export default {
       });
     }, 1500);
   },
-  // mounted() {
+  // mounted() { //realpath
   //   document.getElementById("file").onchange = function () {
-  //       alert('Selected file: ' + this.value);
+  //     // alert("Selected file: " + this.value);
+  //     this.selectimage = this.value;
+  //     console.log("selectimage", this.selectimage);
   //   };
   // },
   methods: {
@@ -83,27 +81,16 @@ export default {
       this.logout();
       this.$router.push("/");
     },
-    //   more() {
-    //     // axios
-    //     //   // .get('https://codingapple1.github.io/vue/more' +this.moreBtnCount +'.json')
-    //     //   .get(`https://codingapple1.github.io/vue/more${this.moreBtnCount}.json`)
-    //     //   .then((result) => {
-    //     //     this.postdatas.push(result.data);
-    //     //     this.moreBtnCount++;
-    //     //   })
-    //     //   .catch((err) => {
-    //     //     alert(err);
-    //     //   });
-    //   },
     uploadFileCheck(p) {
-      console.log(p);
-      if (p.name.substr(p.name.indexOf(".")) == ".mp4") {
-        if (p.type.search(/^video\/*/) != -1) {
+      if (p.type.search(/^video\/*/) != -1) {
+        if (p.name.substr(p.name.indexOf(".")) == ".mp4") {
           if (p.size < 50 * 1024 * 1024) {
             return "video";
           } else {
             alert("50MB 이하 동영상 파일만 등록 가능합니다.");
           }
+        } else {
+          alert(".mp4 동영상 파일만 등록 가능합니다.");
         }
       }
 
@@ -118,15 +105,20 @@ export default {
       return "none";
     },
     upload(e) {
-      let filetype = this.uploadFileCheck(e.target.files[0]);
-      if (filetype == "image") {
-        let imgfile = e.target.files;
-        let uploadUrl = URL.createObjectURL(imgfile[0]);
-        this.uploadimg = uploadUrl;
+      this.uploadtype = this.uploadFileCheck(e.target.files[0]);
+      if (this.uploadtype == "image") {
+        this.selectfile = e.target.files;
+        let tempUrl = URL.createObjectURL(this.selectfile[0]);
+        this.uploadurl = tempUrl;
         this.step = 1;
+      } else if (this.uploadtype == "video") {
+        this.selectfile = e.target.files;
+        let tempUrl = URL.createObjectURL(this.selectfile[0]);
+        this.uploadurl = tempUrl;
+        this.step = 2;
+      } else if (this.uploadtype == "none") {
+        alert("다시 시도해 주세요.");
       }
-      // if (filetype == "video") {
-      // }
     },
     publish() {
       const monthNames = [
@@ -143,22 +135,58 @@ export default {
         "Nov",
         "Dec",
       ];
+
       let date = new Date();
-      let newpost = {
-        user: this.$store.getters["userStore/getUid"],
-        postimage: this.uploadimg.substr(5),
-        filter: this.selectedfilter,
-        date:
-          date.getFullYear().toString().substr(2) +
-          " " +
-          monthNames[date.getMonth()] +
-          " " +
-          date.getDate(),
-        content: this.writecontent,
-      };
-      console.log("upload post", newpost);
+      const newpost = new FormData();
+      newpost.append(
+        "postDto",
+        new Blob(
+          [
+            JSON.stringify({
+              writer: this.$store.getters["userStore/getUid"],
+              mediatype: this.uploadtype,
+              filter: this.selectedfilter,
+              date:
+                date.getFullYear().toString().substr(2) +
+                " " +
+                monthNames[date.getMonth()] +
+                " " +
+                date.getDate(),
+              content: this.writecontent,
+            }),
+          ],
+          { type: "application/json" }
+        )
+      );
+      for (let i = 0; i < this.selectfile.length; i++) {
+        newpost.append("files", this.selectfile[i]);
+        // newpost.append("files", new Blob([JSON.stringify(this.selectfile[i])]));
+      }
+
+      // let newpost = {
+      //   postDto: {
+      //     writer: this.$store.getters["userStore/getUid"],
+      //     mediatype: this.uploadtype,
+      //     filter: this.selectedfilter,
+      //     date:
+      //       date.getFullYear().toString().substr(2) +
+      //       " " +
+      //       monthNames[date.getMonth()] +
+      //       " " +
+      //       date.getDate(),
+      //     content: this.writecontent,
+      //   },
+      //   files: upfiles,
+      // };
+
       this.$store.dispatch("publish", newpost);
+
       this.step = 0;
+      this.uploadtype = "none";
+      this.uploadurl = "";
+      this.selectedfilter = "";
+      this.writecontent = "";
+      this.selectfile = [];
     },
   },
 };

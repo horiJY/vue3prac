@@ -26,7 +26,8 @@ public interface PostMapper {
                         "AND P.ID = #{id}")
         PostDto selectPost(Long id);
 
-        @Insert("INSERT INTO post(user, mediatype, url, filter, content, date) VALUES (#{user}, #{mediatype}, #{url}, #{postimage},#{filter},#{content},#{date})")
+        @Insert("INSERT INTO post(id, writer, mediatype, url, filter, content, date) " +
+                        "VALUES (#{id}, #{writer}, #{mediatype}, #{url}, #{filter},#{content},#{date})")
         @SelectKey(statement = "SELECT MAX(id) from POST", keyProperty = "id", before = false, resultType = Long.class)
         int insertPost(CreatePostDto req);
 

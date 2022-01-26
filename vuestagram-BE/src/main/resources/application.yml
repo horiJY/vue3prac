@@ -5,3 +5,13 @@ Spring:
 video:
   base:
     dir: file:C:\\Users\\JY\\Desktop\\code\\vuesta-video\\
+
+image:
+  base:
+    dir: C:\\Users\\JY\\Desktop\\code\\vuesta-image\\
+
+spring:
+  servlet:
+    multipart:
+      maxFileSize: 50MB
+      maxRequestSize: 60MB

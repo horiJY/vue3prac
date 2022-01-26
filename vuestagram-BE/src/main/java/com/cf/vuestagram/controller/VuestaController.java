@@ -9,10 +9,13 @@ import com.cf.vuestagram.dto.PostDto;
 import com.cf.vuestagram.dto.UserAuthDto;
 import com.cf.vuestagram.service.VuestaService;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +32,14 @@ public class VuestaController {
         return vuestaService.findPost();
     }
 
-    @PostMapping("/post")
-    public PostDto postAdd(@RequestBody CreatePostDto req) {
+    @PostMapping(value = "/post", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
+    public PostDto postAdd(
+            @RequestPart(value = "postDto") CreatePostDto req,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files) {
         log.info("POST /post add");
-        return vuestaService.addPost(req);
+        // log.info("{}", req);
+
+        return vuestaService.addPost(req, files);
     }
 
     @PostMapping("/signin")
