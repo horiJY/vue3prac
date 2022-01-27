@@ -1,5 +1,9 @@
 package com.cf.vuestagram.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -28,7 +32,7 @@ public class VuestaService {
     private final FollowRepository followRepository;
     // private final CommentRepository commentRepository;
 
-    @Value("${image.base.dir}")
+    @Value("${media.base.dir}")
     private String baseDir;
 
     public List<PostDto> findPost() {
@@ -46,7 +50,7 @@ public class VuestaService {
             else
                 req.setUrl(req.getUrl() + "," + file.getOriginalFilename());
 
-            Path downloadPath = Paths.get(baseDir + file.getOriginalFilename());
+            Path downloadPath = Paths.get(baseDir + req.getMediatype() + "\\\\" + file.getOriginalFilename());
             try {
                 file.transferTo(downloadPath);
             } catch (Exception e) {
@@ -74,6 +78,35 @@ public class VuestaService {
 
     public void deletePost(String followeeId, String followerId) {
         followRepository.deleteByFolloweeIdAndFollowerId(followeeId, followerId);
+    }
+
+    public byte[] findImage(String name) throws Exception {
+        String imagePath = baseDir + "image\\" + name;
+        FileInputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(imagePath);
+        } catch (FileNotFoundException e) {
+            throw new Exception("파일을 찾을 수 없습니다.");
+        }
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        int readCount = 0;
+        byte[] buffer = new byte[1024];
+        byte[] fileArray = null;
+
+        try {
+            while ((readCount = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, readCount);
+            }
+            fileArray = outputStream.toByteArray();
+            inputStream.close();
+            outputStream.close();
+
+        } catch (IOException e) {
+            throw new Exception("파일을 읽는 과정에서 문제가 발생했습니다.");
+        }
+
+        return fileArray;
     }
 
 }

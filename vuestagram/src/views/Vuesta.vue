@@ -56,7 +56,12 @@ export default {
         .get("/post")
         // .get("http://172.30.1.17:8080/post")
         .then((a) => {
-          // console.log("Request res", a);
+          for (let i of a.data) {
+            if (i.mediatype == "image" && i.url.search(/^http/) == -1) {
+              i.url = i.mediatype + "/" + i.url;
+              console.log("url: ", i);
+            }
+          }
           this.$store.commit("setPost", a.data);
         })
         .catch((err) => {
@@ -68,13 +73,6 @@ export default {
       });
     }, 1500);
   },
-  // mounted() { //realpath
-  //   document.getElementById("file").onchange = function () {
-  //     // alert("Selected file: " + this.value);
-  //     this.selectimage = this.value;
-  //     console.log("selectimage", this.selectimage);
-  //   };
-  // },
   methods: {
     ...mapActions("userStore", ["logout"]),
     logoutBtn() {
@@ -83,22 +81,28 @@ export default {
     },
     uploadFileCheck(p) {
       if (p.type.search(/^video\/*/) != -1) {
-        if (p.name.substr(p.name.indexOf(".")) == ".mp4") {
+        if (
+          p.name.search(["/.mp4$/", "/.m4v$/", "/.wmv$/", "/.mwa$/", "/.asf$/"]) != -1
+        ) {
           if (p.size < 50 * 1024 * 1024) {
             return "video";
           } else {
             alert("50MB 이하 동영상 파일만 등록 가능합니다.");
           }
         } else {
-          alert(".mp4 동영상 파일만 등록 가능합니다.");
+          alert(".mp4, .m4v, .wmv, .mwa, .asf 동영상 파일만 등록 가능합니다.");
         }
       }
 
       if (p.type.search(/^image\/*/) != -1) {
-        if (p.size < 8 * 1024 * 1024) {
-          return "image";
+        if (p.name.search(["/.jpeg$/", "/.png$/", "/.gif$/", "/.bmp$/"]) != -1) {
+          if (p.size < 8 * 1024 * 1024) {
+            return "image";
+          } else {
+            alert("8MB 이하 이미지파일만 등록 가능합니다.");
+          }
         } else {
-          alert("8MB 이하 이미지파일만 등록 가능합니다.");
+          alert(".jpeg .png .gif .bmp만 등록 가능합니다.");
         }
       }
 
@@ -116,8 +120,6 @@ export default {
         let tempUrl = URL.createObjectURL(this.selectfile[0]);
         this.uploadurl = tempUrl;
         this.step = 2;
-      } else if (this.uploadtype == "none") {
-        alert("다시 시도해 주세요.");
       }
     },
     publish() {

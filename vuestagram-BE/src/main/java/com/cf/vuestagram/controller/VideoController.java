@@ -20,7 +20,7 @@ public class VideoController {
         private final VideoService videoService;
 
         @GetMapping(value = "/video/{name}")
-        public ResponseEntity<ResourceRegion> getVideo(@RequestHeader HttpHeaders headers, @PathVariable String name)
+        public ResponseEntity<ResourceRegion> videoSearch(@RequestHeader HttpHeaders headers, @PathVariable String name)
                         throws IOException {
                 // log.info("GET /video/" + name);
 

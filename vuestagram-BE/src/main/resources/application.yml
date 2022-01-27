@@ -2,13 +2,13 @@ Spring:
   profiles:
     active: local
 
-video:
+media:
+  base:
+    dir: C:\\Users\\JY\\Desktop\\code\\vuesta-
+
+videostream:
   base:
     dir: file:C:\\Users\\JY\\Desktop\\code\\vuesta-video\\
-
-image:
-  base:
-    dir: C:\\Users\\JY\\Desktop\\code\\vuesta-image\\
 
 spring:
   servlet:

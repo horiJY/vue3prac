@@ -19,7 +19,7 @@
         </div>
         <p style="color: red">{{ message }}</p>
       </div>
-      <button style="color: #2c4f91" @click.prevent="skip">Login</button>
+      <button style="color: #2c4f91" @click.prevent="loginSubmit">Login</button>
     </form>
   </div>
 </template>
@@ -38,10 +38,6 @@ export default {
     };
   },
   methods: {
-    skip() {
-      this.login("JY");
-      this.$router.push("/vuesta");
-    },
     ...mapActions("userStore", ["login"]),
     async loginSubmit() {
       try {

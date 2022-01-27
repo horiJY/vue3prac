@@ -20,14 +20,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VideoService {
 
-    @Value("${video.base.dir}")
+    @Value("${videostream.base.dir}")
     private String baseDir;
     // private final String baseDir =
     // "file:C:\\Users\\JY\\Desktop\\code\\vuesta-video\\";
 
     public ResponseEntity<ResourceRegion> findVideo(HttpHeaders headers, String name)
             throws IOException {
-        UrlResource video = new UrlResource(baseDir + name + ".mp4");
+        UrlResource video = new UrlResource(baseDir + name);
         final long chunkSize = 1024 * 1024; // 1mb
         long contentLength = video.contentLength();
         Optional<HttpRange> optional = headers.getRange().stream().findFirst();
